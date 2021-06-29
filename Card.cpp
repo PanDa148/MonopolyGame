@@ -5,14 +5,14 @@
 #include "Card.h"
 #include "Player.h"
 #include "Dice.h"
-#include "Space.h"
+#include "Property.h"
 
 Card::Card(){}
 Card::Card(std::string new_text)
 	: text(new_text)
 {}
-
-void Card::function(Player& player, std::vector<Space*>& spaces_ref, std::vector<Player>& players_ref){
+/*
+void Card::function(Player& player, std::vector<Space*>& spaces, std::vector<Player>& players){
 	int x=0;
 }
 
@@ -21,9 +21,9 @@ Collect::Collect (std::string new_text, int new_amount)
 	, amount(new_amount)
 {}
 
-void Collect::function(Player& player, std::vector<Space*>& spaces_ref, std::vector<Player>& players_ref){
+void Collect::function(Player& player, std::vector<Space*>& spaces, std::vector<Player>& players){
 	std::cout<<text<<"\n";
-	player.add_cash(amount);
+	player.cash+=amount;
 }
 
 Pay::Pay (std::string new_text, int new_amount)
@@ -31,19 +31,19 @@ Pay::Pay (std::string new_text, int new_amount)
 	, amount(new_amount)
 {}
 
-void Pay::function(Player& player, std::vector<Space*>& spaces_ref, std::vector<Player>& players_ref){
+void Pay::function(Player& player, std::vector<Space*>& spaces, std::vector<Player>& players){
 	std::cout<<text<<"\n";
-	player.add_cash(-amount);
+	player.cash-=amount;
 }
 
 Go_to_jail::Go_to_jail (std::string new_text)
 	: Card(new_text)
 {}
 
-void Go_to_jail::function(Player& player, std::vector<Space*>& spaces_ref, std::vector<Player>& players_ref){
+void Go_to_jail::function(Player& player, std::vector<Space*>& spaces, std::vector<Player>& players){
 	std::cout<<text<<"\n";
-	player.set_position(10);
-	player.change_jail_status(true);
+	player.position=10;
+	player.in_jail=true;
 }
 
 Collect_from_each_player::Collect_from_each_player(std::string new_text, int new_amount)
@@ -51,11 +51,11 @@ Collect_from_each_player::Collect_from_each_player(std::string new_text, int new
 	, amount(new_amount)
 {}
 
-void Collect_from_each_player::function(Player& player, std::vector<Space*>& spaces_ref, std::vector<Player>& players_ref){
+void Collect_from_each_player::function(Player& player, std::vector<Space*>& spaces, std::vector<Player>& players){
 	std::cout<<text<<"\n";
-	for (int x=1; x<players_ref.size(); x++){
-		players_ref[x].add_cash(-amount);
-		player.add_cash(amount);
+	for (int x=1; x<players.size(); x++){
+		players[x].cash-=amount;
+		player.cash+=amount;
 	}
 }
 
@@ -63,7 +63,7 @@ Get_out_of_jail_free::Get_out_of_jail_free (std::string new_text)
 	: Card(new_text)
 {}
 
-void Get_out_of_jail_free::function(Player& player, std::vector<Space*>& spaces_ref, std::vector<Player>& players_ref){
+void Get_out_of_jail_free::function(Player& player, std::vector<Space*>& spaces, std::vector<Player>& players){
 	std::cout<<text<<"\n";
 	player.set_get_out_of_jail_card(true);
 }
@@ -74,17 +74,18 @@ Pay_for_each_residence::Pay_for_each_residence (std::string new_text, int new_ho
 	, hotel_amount(new_hotel_amount)
 {}
 
-void Pay_for_each_residence::function(Player& player, std::vector<Space*>& spaces_ref, std::vector<Player>& players_ref){
+void Pay_for_each_residence::function(Player& player, std::vector<Space*>& spaces, std::vector<Player>& players){
 	std::cout<<text<<"\n";
 	int num_houses=0;
 	int num_hotels=0;
-	for(int x = 0; x<spaces_ref.size(); x++){
-		if(spaces_ref[x]->get_owner()==player.get_name()){
-			num_houses=num_houses+spaces_ref[x]->get_num_houses();
-			num_hotels=num_hotels+spaces_ref[x]->get_num_hotels();
+	for(int x = 0; x<spaces.size(); x++){
+		Property* p = dynamic_cast<Property*> (spaces[x]);
+		if(p->owner==player.get_name()){
+			num_houses=num_houses+p->num_houses;
+			num_hotels=num_hotels+p->hotel;
 		}
 	}
-	player.add_cash(-num_houses*house_amount-num_hotels*hotel_amount);
+	player.cash=player.cash-num_houses*house_amount-num_hotels*hotel_amount;
 }
 
 Advance_to::Advance_to(std::string new_text, int new_space_pos)
@@ -99,47 +100,47 @@ Advance_to::Advance_to(std::string new_text, std::string new_space_color)
        , space_pos(100)
 {}
 
-void Advance_to::function(Player& player, std::vector<Space*>& spaces_ref, std::vector<Player>& players_ref){
+void Advance_to::function(Player& player, std::vector<Space*>& spaces, std::vector<Player>& players){
 	std::cout<<text<<"\n";
 	std::vector<Card*> cc;
 	std::vector<Card*> c;
 	if (space_color==" "){
-		player.set_position(space_pos);
-    		std::cout<<"You landed on "<<spaces_ref[space_pos]->get_name()<<"\n";
-		spaces_ref[space_pos]->action(player, spaces_ref, 0, players_ref, cc, c);
+		player.position=space_pos;
+    		std::cout<<"You landed on "<<spaces[space_pos]->get_name()<<"\n";
+		spaces[space_pos]->action(player, spaces, 0, players, cc, c);
 	}
 	else if (space_pos==100){
-		while (spaces_ref[player.get_position()]->get_color() != space_color){			
-			int old_pos = player.get_position();
+		while (spaces[player.position]->get_color() != space_color){			
+			int old_pos = player.position;
 			if ((old_pos+1)>39) {
-				player.set_position(old_pos+1-40);
+				player.position=old_pos+1-40;
 				std::cout<<"You passed GO!\n";
-				player.add_cash(2000);
+				player.cash+=2000;
     			}
     			else {
-        			player.advance_position(1);
+        			player.position++;
     			}
 		}
-    		std::cout<<"You landed on "<<spaces_ref[player.get_position()]->get_name()<<"\n";
-		if (spaces_ref[player.get_position()]->get_owner()=="no one"){
-			spaces_ref[player.get_position()]->action(player, spaces_ref, 0, players_ref, cc, c);
+    		std::cout<<"You landed on "<<spaces[player.position]->get_name()<<"\n";
+		if (spaces[player.position]->owner=="no one"){
+			spaces[player.position]->action(player, spaces, 0, players, cc, c);
 		}
 		else {
 			int rent=0;
 			if (space_color=="air"){
-				rent = 2*spaces_ref[player.get_position()]->determine_rent(spaces_ref);
+				rent = 2*spaces[player.position->determine_rent(spaces);
 			}
 			else if (space_color=="sp"){
 				Dice dice;
 				int roll = dice.get_roll();
 				rent = 100*roll;
 			}
-			player.add_cash(-rent);
-			for (int x = 0; x<players_ref.size(); x++){
-				if (players_ref[x].get_name()==spaces_ref[player.get_position()]->get_owner()){
-					players_ref[x].add_cash(rent);
+			player.cash-=rent;
+			for (int x = 0; x<players.size(); x++){
+				if (players[x].get_name()==spaces[player.position]->owner){
+					players[x].cash+=rent;
 					break;
-					std::cout<<"Rent paid to "<<spaces_ref[player.get_position()]->get_owner()<<"\n";
+					std::cout<<"Rent paid to "<<spaces[player.position]->owner<<"\n";
 				}
 			}
 		}
@@ -151,10 +152,11 @@ Pay_each_player::Pay_each_player(std::string new_text, int new_amount)
 	, amount(new_amount)
 {}
 
-void Pay_each_player::function(Player& player, std::vector<Space*>& spaces_ref, std::vector<Player>& players_ref){
+void Pay_each_player::function(Player& player, std::vector<Space*>& spaces, std::vector<Player>& players){
 	std::cout<<text<<"\n";
-	for (int x=1; x<players_ref.size(); x++){
-		players_ref[x].add_cash(amount);
-		player.add_cash(-amount);
+	for (int x=1; x<players.size(); x++){
+		players[x].cash+=amount;
+		player.cash-=amount;
 	}
 }
+*/
