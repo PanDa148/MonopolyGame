@@ -19,7 +19,7 @@ public:
   int net_worth;
   Player (std::string new_name);
   std::string get_name ();
-  int get_num_properties_owned();
+  int num_properties_owned();
   int get_property_owned(int index);
   void add_property();
   int calc_net_worth(std::vector<Space*>& spaces);
