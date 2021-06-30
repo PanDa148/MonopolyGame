@@ -22,6 +22,14 @@ int Space::get_value() {
     return 0;
 }
 
+int Space::get_house_val() {
+    return 0;
+}
+
+int Space::get_hotel_val() {
+    return 0;
+}
+
 std::string Space::get_color () {
     return "";
 }
