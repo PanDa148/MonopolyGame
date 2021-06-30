@@ -77,13 +77,7 @@ Income_Tax::Income_Tax()
     :Space("Income Tax")
 {}
 void Income_Tax::action(Player& player,  std::vector<Space*>& spaces, int dice_rolled, std::vector<Player>& players, std::vector<Card*>& community_chest_cards, std::vector<Card*>& chance_cards) {
-	/*int net_worth=player.cash-player.debt;
-	for (int i=0; i<player.get_num_properties_owned(); i++){
-        int x = player.get_property_owned(i);
-        Property p = dynamic_cast<Property>(*spaces[x]);
-		net_worth=net_worth+p->get_value()+(p->get_num_houses())*(p->get_house_val())+(p->get_num_hotels())*(p->get_hotel_val());
-	}
-	int tax=net_worth*0.1;
+	int tax=player.calc_net_worth(spaces)*0.1;
 	if (tax<2000){
 		std::cout<<"You paid $"<<tax<<".\n";
 		player.cash-=tax;
@@ -92,7 +86,7 @@ void Income_Tax::action(Player& player,  std::vector<Space*>& spaces, int dice_r
 		std::cout<<"You paid $2000.\n";
 		player.cash-=2000;
 	
-	}*/
+	}
 }
 Interest_on_credit_card_debt::Interest_on_credit_card_debt()
     :Space("Interest on credit card debt")
