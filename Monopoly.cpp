@@ -5,6 +5,22 @@
 #include "Dice.h"
 //Compilation command: g++ -c -std=c++0x Monopoly.cpp
 Monopoly::Monopoly(){}
+Monopoly::~Monopoly(){
+	players.clear();
+    for (int x = 0; x<=39; x++) {
+	delete spaces[x];
+	spaces[x] = NULL;
+    }
+    spaces.clear();
+    for (int x = 0; x<community_chest_cards.size(); x++) {
+	delete community_chest_cards[x];
+    }
+    community_chest_cards.clear();
+    for (int x = 0; x<chance_cards.size(); x++) {
+	delete chance_cards[x];
+    }
+    chance_cards.clear();
+}
 
 void Monopoly::assign_players() {
     int num_players=0;
@@ -12,7 +28,7 @@ void Monopoly::assign_players() {
     players.push_back(null_player);
     std::vector<std::string> mascots {"Dog","Ship","Coffee","Laptop","Shoe","McDonald's Cup","Airplane","Cellphone"};
     while(num_players<1 || num_players>8){
-        std::cout<<"How many players?\n";
+        std::cout<<"How many players?(1-8)\n";
         std::cin>>num_players;
     }
     int player_num=1;
@@ -120,31 +136,6 @@ void Monopoly::end_game() {
 	}
 	std::cout<<"and "<<winners[winners.size()-1]<<" won with a net worth of $"<<highest_net_worth<<"!\n";
     }
-    players.clear();
-    for (int x = 0; x<=16; x++) {
-	delete spaces[x];
-    }
-    for (int x = 18; x<=21; x++) {
-	delete spaces[x];
-    }
-    for (int x = 23; x<=32; x++) {
-	delete spaces[x];
-    }
-    for (int x = 34; x<=35; x++) {
-	delete spaces[x];
-    }
-    for (int x = 37; x<=39; x++) {
-	delete spaces[x];
-    }
-    spaces.clear();
-    for (int x = 0; x<community_chest_cards.size(); x++) {
-	delete community_chest_cards[x];
-    }
-    community_chest_cards.clear();
-    for (int x = 0; x<chance_cards.size(); x++) {
-	delete chance_cards[x];
-    }
-    chance_cards.clear();
 }
 
 void Monopoly::take_mortgage(Player& player) {
@@ -152,33 +143,33 @@ void Monopoly::take_mortgage(Player& player) {
 	std::cout<<"Which property do you want to mortgage?\n";
 	std::vector<int> properties_to_mortgage;
 	for (int x = 0; x<spaces.size(); x++){
-		Property* chosen = dynamic_cast<Property*>(spaces[x]);
+		Space* chosen = spaces[x];
 		if ((chosen->owner == player.get_name()) && !(chosen->mortgaged)){
 			properties_to_mortgage.push_back(x);
 		}
 	}
 	for (int x=0; x<properties_to_mortgage.size(); x++){
 		int i = properties_to_mortgage[x];
-		Property* p = dynamic_cast<Property*>(spaces[i]);
+		Space* p = spaces[i];
 		std::cout<<x<<": "<<p->get_name()<<" for $"<<p->get_mortgage_value()<<"\n";
 	}
 	std::cin>>input;
 	int choice = stoi(input);
-	Property* chosen = dynamic_cast<Property*>(spaces[properties_to_mortgage[choice]]);
+	Space* chosen = spaces[properties_to_mortgage[choice]];
 	player.cash+=chosen->get_mortgage_value();
 	player.debt+=chosen->get_mortgage_value();
 	chosen->mortgaged=true;
 }
 
 void Monopoly::show_properties_owned(Player& player){
-	int num_properties_owned = player.get_num_properties_owned();
+	int num_properties_owned = player.num_properties_owned();
 	std::cout<<"Which property do you want to see?\n";
 	int input;
 	for (int x=0; x<num_properties_owned; x++){
 		std::cout<<x<<": "<<spaces[player.get_property_owned(x)]->get_name()<<"\n";
 	}
 	std::cin>>input;
-	Property* choice = dynamic_cast<Property*>(spaces[player.get_property_owned(input)]);
+	Space* choice = spaces[player.get_property_owned(input)];
 	choice->show_details();
 }
 int Monopoly::show_options(Player& player) {
@@ -260,10 +251,10 @@ void Monopoly::players_turn (Player& player) {
 		if (doubles_count>0) {
 	    		std::cout<<player.get_name()<<" can roll again!\n";
 		}
-               	dice.roll();
+            dice.roll();
         	roll = dice.get_roll();
         	if (dice.is_doubles()) {
-    	    		std::cout<<"Doubles!\n";
+    	    	std::cout<<"Doubles!\n";
 	    		doubles_count++;
         	}
         	else {
@@ -311,7 +302,7 @@ void Monopoly::manage_player_turns(){
     bool game = true;
     int input=10;
     while (game) {
-		for (int i=1; i<players.size(); i++) {
+		for (int i=1; i<players.size() && game; i++) {
 			Monopoly::players_turn(players[i]);
 			std::string loser=Monopoly::player_who_went_bankrupt();
 			if (loser!=" "){
@@ -326,13 +317,9 @@ void Monopoly::manage_player_turns(){
 						case 0:
 							break;
 						case 1:
-							std::cout<<"b\n";
-							for (int x=0; x<players[i].get_num_properties_owned(); x++) {
-								std::cout<<"a\n";
-								Property* p = dynamic_cast<Property*>(spaces[x]);
-								std::cout<<"c\n";
-								p->show_details();
-								std::cout<<"d\n";
+							for (int x=0; x<players[i].num_properties_owned(); x++) {
+								int p = players[i].get_property_owned(x);
+								spaces[p]->show_details();
 							}
 							break;
 						case 2:
