@@ -23,7 +23,7 @@ void Player::add_property(){
 	properties_owned.push_back(position);
 }
 
-int Player::get_num_properties_owned(){
+int Player::num_properties_owned(){
 	return properties_owned.size();
 }
 int Player::get_property_owned(int index){
@@ -33,7 +33,7 @@ int Player::get_property_owned(int index){
 int Player::calc_net_worth(std::vector<Space*>& spaces) {
     int total = cash-debt;
     for (int x=0; x<properties_owned.size(); x++){
-        Property* p = dynamic_cast<Property*>(spaces[properties_owned[x]]);
+        Space* p = spaces[properties_owned[x]];
 		total+=p->get_value();//(p->get_num_houses())*(p->get_house_val())+(p->get_num_hotels())*(p->get_hotel_val());
         
 	}
