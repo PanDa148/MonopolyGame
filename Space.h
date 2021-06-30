@@ -12,8 +12,16 @@ protected:
 public:
   Space ();
   Space (std::string new_name);
+  bool mortgaged;
+  std::string owner;
+  int num_houses;
+  bool hotel;
+  virtual int get_value();
+  virtual std::string get_color ();
   std::string get_name ();
   int get_position();
+  virtual void show_details();
+  virtual int get_mortgage_value ();
   virtual void action(Player& player,  std::vector<Space*>& spaces, int dice_rolled, std::vector<Player>& players, std::vector<Card*>& community_chest_cards, std::vector<Card*>& chance_cards);
   virtual int determine_rent(std::vector<Space*>& spaces);
 };
