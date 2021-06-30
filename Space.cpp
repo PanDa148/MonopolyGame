@@ -8,10 +8,22 @@
 Space::Space(){}
 Space::Space(std::string new_name)
     : name(new_name)
+    , mortgaged(false)
+    , owner("")
+    , num_houses(0)
+    , hotel(false)
 {}
     
 std::string Space::get_name() {
     return name;
+}
+
+int Space::get_value() {
+    return 0;
+}
+
+std::string Space::get_color () {
+    return "";
 }
 
 void Space::action(Player& player,  std::vector<Space*>& spaces, int dice_rolled, std::vector<Player>& players, std::vector<Card*>& community_chest_cards, std::vector<Card*>& chance_cards) {
@@ -20,6 +32,15 @@ void Space::action(Player& player,  std::vector<Space*>& spaces, int dice_rolled
 int Space::determine_rent(std::vector<Space*>& spaces){
 	return 0;
 }
+
+void Space::show_details() {
+
+}
+
+int Space::get_mortgage_value () {
+    return 0;
+}
+
 GO::GO()
     :Space("Go")
 {}
