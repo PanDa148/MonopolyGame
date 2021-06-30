@@ -26,6 +26,7 @@ class Monopoly{
 
     public:
     Monopoly();
+    ~Monopoly();
     void assign_players();
     void assemble_game_board();
     void end_game();
