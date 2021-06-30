@@ -33,9 +33,8 @@ int Player::get_property_owned(int index){
 int Player::calc_net_worth(std::vector<Space*>& spaces) {
     int total = cash-debt;
     for (int x=0; x<properties_owned.size(); x++){
-        Space* p = spaces[properties_owned[x]];
-		total+=p->get_value();//(p->get_num_houses())*(p->get_house_val())+(p->get_num_hotels())*(p->get_hotel_val());
-        
+        Space* s = spaces[properties_owned[x]];
+		total+=s->get_value()+(s->num_houses)*(s->get_house_val())+(s->hotel)*(s->get_hotel_val());
 	}
     net_worth=total;
     return total;
