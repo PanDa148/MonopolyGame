@@ -17,6 +17,8 @@ public:
   int num_houses;
   bool hotel;
   virtual int get_value();
+  virtual int get_house_val ();
+  virtual int get_hotel_val ();
   virtual std::string get_color ();
   std::string get_name ();
   int get_position();
