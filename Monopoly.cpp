@@ -2,24 +2,18 @@
 #include <cmath>
 #include <algorithm>
 #include "Monopoly.h"
-#include "Dice.h"
 //Compilation command: g++ -c -std=c++0x Monopoly.cpp
 Monopoly::Monopoly(){}
 Monopoly::~Monopoly(){
 	players.clear();
-    for (int x = 0; x<=39; x++) {
-	delete spaces[x];
-	spaces[x] = NULL;
-    }
-    spaces.clear();
-    for (int x = 0; x<community_chest_cards.size(); x++) {
+    /*for (int x = 0; x<community_chest_cards.size(); x++) {
 	delete community_chest_cards[x];
     }
     community_chest_cards.clear();
     for (int x = 0; x<chance_cards.size(); x++) {
 	delete chance_cards[x];
     }
-    chance_cards.clear();
+    chance_cards.clear();*/
 }
 
 void Monopoly::assign_players() {
@@ -54,50 +48,6 @@ void Monopoly::assign_players() {
     }
 }
 
-void Monopoly::assemble_game_board() {
-    Space* a = new GO();
-    Space* b = new Land("Jacobs Field","purple",600,20,100,300,900,1600,2500);
-    Space* c = new Community_Chest();
-    Space* d = new Land("Texas Stadium","purple",600,40,200,600,1800,3200,4500);
-    Space* e = new Income_Tax();
-    Space* f = new Airport("ORD");
-    Space* g = new Land("Grand Ole Opry","light blue",1000,60,300,900,2700,4000,5500);
-    Space* h = new Chance();
-    Space* i = new Land("Gateway Arch","light blue",1000,60,300,900,2700,4000,5500);
-    Space* j = new Land("Mall of America","light blue",1200,80,400,1000,3000,4500,6000);
-    Space* k = new Jail();
-    Space* l = new Land("Centennial Olympic Park","pink",1400,100,500,1500,4500,6250,7500);
-    Space* m = new Service_Provider("Cell Phone");
-    Space* n = new Land("Red Rocks Amphitheatre","pink",1400,100,500,1500,4500,6250,7500);
-    Space* o = new Land("Liberty Bell","pink",1600,120,600,1800,5000,7000,9000);
-    Space* p = new Airport("LAX");
-    Space* q = new Land("South Beach","orange",1800,140,700,2000,5500,7500,9500);
-    Space* r = new Community_Chest();
-    Space* s = new Land("Johnson Space Center","orange",1800,140,700,2000,5500,7500,9500);
-    Space* t = new Land("Pioneer Square","orange",2000,160,800,2200,6000,8000,10000);
-    Space* u = new Free_Parking();
-    Space* v = new Land("CamelBack Mtn.","red",2200,180,900,2500,7000,8750,10500);
-    Space* w = new Chance();
-    Space* x = new Land("Waikiki Beach","red",2200,180,900,2500,7000,8750,10500);
-    Space* y = new Land("Disney World","red",2400,200,1000,3000,7500,9250,11000);
-    Space* z = new Airport("JFK");
-    Space* A = new Land("French Quarter","yellow",2600,220,1100,3300,8000,9750,11500);
-    Space* B = new Land("Hollywood","yellow",2600,220,1100,3300,8000,9750,11500);
-    Space* C = new Service_Provider("Internet");
-    Space* D = new Land("Golden Gate Bridge","yellow",2800,240,1200,3600,8500,10250,12000);
-    Space* E = new Go_To_Jail();
-    Space* F = new Land("Las Vegas Blvd.","green",3000,260,1300,3900,9000,11000,12750);
-    Space* G = new Land("Wrigley Field","green",3000,260,1300,3900,9000,11000,12750);
-    Space* H = new Community_Chest();
-    Space* I = new Land("White House","green",3200,280,1500,4500,10000,12000,14000);
-    Space* J = new Airport("ATL");
-    Space* K = new Chance();
-    Space* L = new Land("Fenway Park","blue",3500,350,1750,5000,11000,13000,15000);
-    Space* M = new Interest_on_credit_card_debt();
-    Space* N = new Land("Times Square","blue",4000,500,2000,6000,14000,17000,20000);
-    spaces = {a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z,A, B, C, D, E, F, G, H, I, J, K, L, M, N};
-}
-
 void Monopoly::assemble_cards(){/*
 	Card* aa = new Get_out_of_jail_free("Receive a presidential pardon");
 	Card* ab = new Collect_from_each_player("You file as a candidate for Mayor.", 500);
@@ -113,7 +63,7 @@ void Monopoly::end_game() {
     int highest_net_worth=0;
     for (int x=1; x<players.size();x++){
 		Player& player=players[x];
-		int cur_net_worth=player.calc_net_worth(spaces);
+		int cur_net_worth=player.calc_net_worth(gb);
 		if (cur_net_worth>=highest_net_worth){
 			highest_net_worth=cur_net_worth;
 		}
@@ -142,20 +92,20 @@ void Monopoly::take_mortgage(Player& player) {
 	std::string input;
 	std::cout<<"Which property do you want to mortgage?\n";
 	std::vector<int> properties_to_mortgage;
-	for (int x = 0; x<spaces.size(); x++){
-		Space* chosen = spaces[x];
+	for (int x = 0; x<40; x++){
+		Space* chosen = gb[x];
 		if ((chosen->owner == player.get_name()) && !(chosen->mortgaged)){
 			properties_to_mortgage.push_back(x);
 		}
 	}
 	for (int x=0; x<properties_to_mortgage.size(); x++){
 		int i = properties_to_mortgage[x];
-		Space* p = spaces[i];
+		Space* p = gb[i];
 		std::cout<<x<<": "<<p->get_name()<<" for $"<<p->get_mortgage_value()<<"\n";
 	}
 	std::cin>>input;
 	int choice = stoi(input);
-	Space* chosen = spaces[properties_to_mortgage[choice]];
+	Space* chosen = gb[properties_to_mortgage[choice]];
 	player.cash+=chosen->get_mortgage_value();
 	player.debt+=chosen->get_mortgage_value();
 	chosen->mortgaged=true;
@@ -166,10 +116,10 @@ void Monopoly::show_properties_owned(Player& player){
 	std::cout<<"Which property do you want to see?\n";
 	int input;
 	for (int x=0; x<num_properties_owned; x++){
-		std::cout<<x<<": "<<spaces[player.get_property_owned(x)]->get_name()<<"\n";
+		std::cout<<x<<": "<<gb[player.get_property_owned(x)]->get_name()<<"\n";
 	}
 	std::cin>>input;
-	Space* choice = spaces[player.get_property_owned(input)];
+	Space* choice = gb[player.get_property_owned(input)];
 	choice->show_details();
 }
 int Monopoly::show_options(Player& player) {
@@ -199,7 +149,7 @@ int Monopoly::move_player(Player& player,int num){
         player.position+=num;
     }
     int new_pos = player.position;
-    std::cout<<"You landed on "<<spaces[new_pos]->get_name()<<"\n";
+    std::cout<<"You landed on "<<gb[new_pos]->get_name()<<"\n";
     return new_pos;
 }
 void Monopoly::players_turn (Player& player) {
@@ -243,7 +193,6 @@ void Monopoly::players_turn (Player& player) {
     		}
 	}
 	if (!player.in_jail){
-    	Dice dice;
     	int roll;
     	int doubles_count=0;
     	bool first_roll = true;
@@ -251,16 +200,15 @@ void Monopoly::players_turn (Player& player) {
 		if (doubles_count>0) {
 	    		std::cout<<player.get_name()<<" can roll again!\n";
 		}
-            dice.roll();
-        	roll = dice.get_roll();
-        	if (dice.is_doubles()) {
+            gb.roll();
+        	roll = gb.getRoll();
+        	if (gb.isDoubles()) {
     	    	std::cout<<"Doubles!\n";
 	    		doubles_count++;
         	}
         	else {
 	    		doubles_count=0;
         	}
-        	std::cout<<"You rolled a "<<roll<<"!\n";
         	if (doubles_count>2) {
 	    		std::cout<<"You rolled doubles 3 times in a row!\n";
 	    		std::cout<<"Go to jail!\n";
@@ -269,7 +217,7 @@ void Monopoly::players_turn (Player& player) {
         	}
 		else {
 	    		int new_pos = Monopoly::move_player(player,roll);
-   	    		(spaces[new_pos])->action(player, spaces, roll, players, community_chest_cards, chance_cards);
+   	    		(gb[new_pos])->action(player, gb,players);
     			std::cout<<"You have $"<<player.cash<<".\n";
     			while (player.cash<0){
 				std::cout<<"You need to take a mortgage to cover the debt\n";
@@ -284,7 +232,7 @@ void Monopoly::players_turn (Player& player) {
 }
 
 bool Monopoly::is_bankrupt(Player& player){
-	int net_worth=player.calc_net_worth(spaces);
+	int net_worth=player.calc_net_worth(gb);
 	return net_worth<0;
 }
 
@@ -319,7 +267,7 @@ void Monopoly::manage_player_turns(){
 						case 1:
 							for (int x=0; x<players[i].num_properties_owned(); x++) {
 								int p = players[i].get_property_owned(x);
-								spaces[p]->show_details();
+								gb[p]->show_details();
 							}
 							break;
 						case 2:
