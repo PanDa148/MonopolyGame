@@ -29,10 +29,10 @@ void Property::show_details() {
 	}
 }
 
-int Property::count(std::vector<Space*>& spaces) {
+int Property::count(GameBoard& gb) {
     int c=0;
-    for (int x=0; x<spaces.size(); x++){
-        Space* p = spaces[x];
+    for (int x=0; x<40; x++){
+        Space* p = gb[x];
 		if (p->owner==owner && p->get_color()==color){
 			c++;
 		}
@@ -40,11 +40,11 @@ int Property::count(std::vector<Space*>& spaces) {
     return c;
 }
 
-int Property::rent(std::vector<Space*>& spaces, int dice_rolled) {
+int Property::rent(GameBoard& gb) {
     return 0;
 }
 
-void Property::action(Player& player, std::vector<Space*>& spaces, int dice_rolled, std::vector<Player>& players, std::vector<Card*>& community_chest_cards, std::vector<Card*>& chance_cards) {
+void Property::action(Player& player, GameBoard& gb, std::vector<Player>& players) {
 		if (owner == ""){
 			std::string input=" ";
             while (input!="y" && input !="n"){
@@ -62,7 +62,7 @@ void Property::action(Player& player, std::vector<Space*>& spaces, int dice_roll
 			std::cout<<name<<" is mortgaged.\n";
 		}
 		else {
-			int r = rent(spaces,dice_rolled);
+			int r = rent(gb);
 			std::cout<<get_name()<<" is owned by "<<owner<<". Rent is $"<<r<<".\n";
 			player.cash-=r;
             for (int x = 0; x<players.size(); x++){
