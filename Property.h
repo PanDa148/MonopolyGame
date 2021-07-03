@@ -6,24 +6,21 @@ class Player;
 class Property : public Space
 {
 protected:
-  bool mortgaged;
-  std::string owner_name;
+  int value;
+  std::string color;
 
 public:
+  bool mortgaged;
+  std::string owner;
+  int num_houses;
+  bool hotel;
   Property ();
-  Property (std::string new_name, int new_positon);
-  void set_owner(std::string new_owner);
-  std::string get_owner();
-  virtual std::string get_color ();
-  virtual int get_value ();
-  virtual int get_mortgage_value ();
-  virtual int get_num_houses ();
-  virtual int get_num_hotels ();
-  virtual int get_house_val ();
-  virtual int get_hotel_val ();
-  bool is_mortgaged ();
-  void set_mortgage(bool new_mortgage);
-  //virtual int determine_rent (std::vector <std::shared_ptr<Property>>properties,
-//			      int dice_rolled, std::vector<Player>& players_ref);
-  //virtual bool is_sellable (std::vector <std::shared_ptr<Property>>properties);
+  Property (std::string new_name, int new_mortgage_value, std::string new_color);
+  int get_value ();
+  std::string get_color ();
+  int get_mortgage_value ();
+  virtual void show_details();
+  virtual int count(std::vector<Space*>& spaces);
+  virtual int rent(std::vector<Space*>& spaces, int dice_rolled);
+  void action(Player& player, std::vector<Space*>& spaces, int dice_rolled, std::vector<Player>& players, std::vector<Card*>& community_chest_cards, std::vector<Card*>& chance_cards);
 };
