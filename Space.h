@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "GameBoard.h"
 
 class Player;
 class Card;
@@ -24,14 +25,14 @@ public:
   int get_position();
   virtual void show_details();
   virtual int get_mortgage_value ();
-  virtual void action(Player& player,  std::vector<Space*>& spaces, int dice_rolled, std::vector<Player>& players, std::vector<Card*>& community_chest_cards, std::vector<Card*>& chance_cards);
-  virtual int determine_rent(std::vector<Space*>& spaces);
+  virtual void action(Player& player,  GameBoard& gb,std::vector<Player>& players);
+  virtual int determine_rent(GameBoard& gb);
 };
 
 class GO:public Space{
   public:
   GO();
-  void action(Player& player,  std::vector<Space*>& spaces, int dice_rolled, std::vector<Player>& players, std::vector<Card*>& community_chest_cards, std::vector<Card*>& chance_cards);
+  void action(Player& player,  GameBoard& gb, std::vector<Player>& players);
 };
 
 class Jail:public Space{
@@ -47,29 +48,32 @@ class Free_Parking:public Space{
 class Go_To_Jail:public Space{
     public:
     Go_To_Jail();
-    void action(Player& player,  std::vector<Space*>& spaces, int dice_rolled, std::vector<Player>& players, std::vector<Card*>& community_chest_cards, std::vector<Card*>& chance_cards);
+    void action(Player& player, GameBoard& gb, std::vector<Player>& players);
 };
 
 class Income_Tax:public Space{
     public:
     Income_Tax();
-    void action(Player& player,  std::vector<Space*>& spaces, int dice_rolled, std::vector<Player>& players, std::vector<Card*>& community_chest_cards, std::vector<Card*>& chance_cards);
+    void action(Player& player, GameBoard& gb,std::vector<Player>& players);
 };
 
 class Interest_on_credit_card_debt:public Space{
     public:
     Interest_on_credit_card_debt();
-    void action(Player& player,  std::vector<Space*>& spaces, int dice_rolled, std::vector<Player>& players, std::vector<Card*>& community_chest_cards, std::vector<Card*>& chance_cards);
+    void action(Player& player, GameBoard& gb,std::vector<Player>& players);
 };
 
-class Community_Chest : public Space{
+class Card_Space : public Space {
+    public:
+    Card_Space(std::string type);
+};
+
+class Community_Chest : public Card_Space{
     public:
     Community_Chest();
-    virtual void action(Player& player,  std::vector<Space*>& spaces, int dice_rolled, std::vector<Player>& players, std::vector<Card*>& community_chest_cards, std::vector<Card*>& chance_cards);
 };
 
-class Chance : public Space{
+class Chance : public Card_Space{
     public:
     Chance();
-    virtual void action(Player& player,  std::vector<Space*>& spaces, int dice_rolled, std::vector<Player>& players, std::vector<Card*>& community_chest_cards, std::vector<Card*>& chance_cards);
 };

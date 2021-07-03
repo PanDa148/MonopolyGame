@@ -1,15 +1,14 @@
-#include "Land.h"
-#include "Player.h"
+#include "Property.h"
 Land::Land(){}
 Land::Land(std::string new_name, std::string new_color,int new_value,int new_base_rent_val, int new_rent_1h, int new_rent_2h, int new_rent_3h, int new_rent_4h, int new_rent_hotel)
-    :Property(new_name, new_value, new_color),
+    : Property(new_name, new_value, new_color),
     base_rent_val(new_base_rent_val),
     rent_1h(new_rent_1h),
     rent_2h(new_rent_2h),
     rent_3h(new_rent_3h),
     rent_4h(new_rent_4h),
     rent_hotel(new_rent_hotel)
-    {}
+{}
 
 
 int Land::get_house_val() {
@@ -46,7 +45,7 @@ int Land::total_val() {
     return total;
 }
 
-int Land::rent(std::vector<Space*>& spaces, int dice_rolled) {
+int Land::rent(GameBoard& gb) {
     int num=0;
     if (color=="blue" || color=="purple") {
         num = 2;
@@ -54,7 +53,7 @@ int Land::rent(std::vector<Space*>& spaces, int dice_rolled) {
     else {
         num=3;
     }
-    int c = count(spaces);
+    int c = count(gb);
     if (c != num){
 	return base_rent_val;
     }
@@ -85,12 +84,12 @@ void Land::show_details(){
     std::cout<<color<<"\n";
 	std::cout<<"Rent $"<<base_rent_val<<"\n";
 	std::cout<<"With 1 House $"<<rent_1h<<"\n";
-	std::cout<<"With 2 Houses"<<rent_2h<<"\n";
-	std::cout<<"With 3 Houses"<<rent_3h<<"\n";
-	std::cout<<"With 4 Houses"<<rent_4h<<"\n";
+	std::cout<<"With 2 Houses $"<<rent_2h<<"\n";
+	std::cout<<"With 3 Houses $"<<rent_3h<<"\n";
+	std::cout<<"With 4 Houses $"<<rent_4h<<"\n";
 	std::cout<<"With HOTEL $"<<rent_hotel<<"\n";
 	std::cout<<"Mortgage Value $"<<value/2<<"\n";
 	std::cout<<"Houses cost $"<<Land::get_house_val()<<" each\n";
-	std::cout<<"Hotels cost $"<<Land::get_hotel_val()<<"each\n";
-	std::cout<<"If a player owns ALL the lots of any color group, the rent is doubles on unimproved lotes in that group.\n\n";
+	std::cout<<"Hotels cost $"<<Land::get_hotel_val()<<" each\n";
+	std::cout<<"If a player owns ALL the lots of any color group, the rent is doubles on unimproved lots in that group.\n\n";
 }

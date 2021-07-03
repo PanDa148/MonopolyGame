@@ -1,20 +1,21 @@
 #include <iostream>
-#include "Service_Provider.h"
-#include "Player.h"
+#include "Property.h"
 Service_Provider::Service_Provider(){}
 Service_Provider::Service_Provider(std::string new_name)
     :Property(new_name+" Service Provider", 1500, "sp")
     {}
-int Service_Provider::rent(std::vector<Space*>& spaces, int dice_rolled) {
-    switch(count(spaces)){
+
+int Service_Provider::rent(GameBoard& gb) {
+    int roll=gb.getRoll();
+    switch(count(gb)){
         case 1:
-            return 40*dice_rolled;
+            return 40*roll;
             break;
         case 2:
-            return 100*dice_rolled;
+            return 100*roll;
             break;
-	default:
-	    return 0;
+        default:
+            return 0;
     }
 }
 

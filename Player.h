@@ -2,9 +2,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "GameBoard.h"
 class Space;
-class Property;
-class Land;
 class Player
 {
 private:
@@ -22,5 +21,5 @@ public:
   int num_properties_owned();
   int get_property_owned(int index);
   void add_property();
-  int calc_net_worth(std::vector<Space*>& spaces);
+  int calc_net_worth(GameBoard& gb);
 };

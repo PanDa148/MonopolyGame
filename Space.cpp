@@ -34,10 +34,10 @@ std::string Space::get_color () {
     return "";
 }
 
-void Space::action(Player& player,  std::vector<Space*>& spaces, int dice_rolled, std::vector<Player>& players, std::vector<Card*>& community_chest_cards, std::vector<Card*>& chance_cards) {
+void Space::action(Player& player, GameBoard& gb, std::vector<Player>& players) {
     int x=0;
 }
-int Space::determine_rent(std::vector<Space*>& spaces){
+int Space::determine_rent(GameBoard& gb){
 	return 0;
 }
 
@@ -52,7 +52,7 @@ int Space::get_mortgage_value () {
 GO::GO()
     :Space("Go")
 {}
-void GO::action(Player& player,  std::vector<Space*>& spaces, int dice_rolled, std::vector<Player>& players, std::vector<Card*>& community_chest_cards, std::vector<Card*>& chance_cards) {
+void GO::action(Player& player,  GameBoard& gb, std::vector<Player>& players) {
     player.cash+=2000;
 }
 
@@ -67,7 +67,7 @@ Free_Parking::Free_Parking()
 Go_To_Jail::Go_To_Jail()
     :Space("Go To Jail")
 {}
-void Go_To_Jail::action(Player& player,  std::vector<Space*>& spaces, int dice_rolled, std::vector<Player>& players, std::vector<Card*>& community_chest_cards, std::vector<Card*>& chance_cards) {
+void Go_To_Jail::action(Player& player,  GameBoard& gb, std::vector<Player>& players) {
     std::cout<<"Go to jail!!!";
     player.in_jail=true;
     player.position=11;
@@ -76,8 +76,8 @@ void Go_To_Jail::action(Player& player,  std::vector<Space*>& spaces, int dice_r
 Income_Tax::Income_Tax()
     :Space("Income Tax")
 {}
-void Income_Tax::action(Player& player,  std::vector<Space*>& spaces, int dice_rolled, std::vector<Player>& players, std::vector<Card*>& community_chest_cards, std::vector<Card*>& chance_cards) {
-	int tax=player.calc_net_worth(spaces)*0.1;
+void Income_Tax::action(Player& player,  GameBoard& gb, std::vector<Player>& players) {
+	int tax=player.calc_net_worth(gb)*0.1;
 	if (tax<2000){
 		std::cout<<"You paid $"<<tax<<".\n";
 		player.cash-=tax;
@@ -91,39 +91,19 @@ void Income_Tax::action(Player& player,  std::vector<Space*>& spaces, int dice_r
 Interest_on_credit_card_debt::Interest_on_credit_card_debt()
     :Space("Interest on credit card debt")
 {}
-void Interest_on_credit_card_debt::action(Player& player,  std::vector<Space*>& spaces, int dice_rolled, std::vector<Player>& players, std::vector<Card*>& community_chest_cards, std::vector<Card*>& chance_cards) {
+void Interest_on_credit_card_debt::action(Player& player, GameBoard& gb,std::vector<Player>& players) {
     player.cash-=750;
     std::cout<<"You paid $750\n";
 }
-Community_Chest::Community_Chest()
-    :Space("Community Chest")
+
+Card_Space::Card_Space(std::string type)
+    :Space(type)
 {}
-void Community_Chest::action(Player& player,  std::vector<Space*>& spaces, int dice_rolled, std::vector<Player>& players, std::vector<Card*>& community_chest_cards, std::vector<Card*>& chance_cards) {
-    std::string input;
-    int pos = player.position;
-    /*std::cout<<"Press p to select a card\n";
-    std::cin>>input;
-    Card& selected_card = *(community_chest_cards[0]);
-    community_chest_cards.erase(community_chest_cards.begin());
-    community_chest_cards.push_back(&selected_card);
-    selected_card.function(player, spaces, players);*/
-}
+
+Community_Chest::Community_Chest()
+    :Card_Space("Community Chest")
+{}
 
 Chance::Chance()
-    :Space("Chance")
+    :Card_Space("Chance")
 {}
-void Chance::action(Player& player,  std::vector<Space*>& spaces, int dice_rolled, std::vector<Player>& players, std::vector<Card*>& community_chest_cards, std::vector<Card*>& chance_cards) {
-    //std::string input;
-    int pos = player.position;
-    /*std::cout<<"Press p to select a card\n";
-    std::cin>>input;
-    std::cout<<"Card selected\n";
-    (chance_cards[0])->function(player, spaces, players);*/
-    /* Card& selected_card = *(chance_cards[0]);
-    std::cout<<"selected card assigned\n";
-    chance_cards.push_back(chance_cards[0]);
-    std::cout<<"Selected card added to end\n";
-    chance_cards.erase(chance_cards.begin());
-    std::cout<<"Selected card deleted\n";
-    chance_cards[chance_cards.size()-1]->function(player, spaces, players);*/
-}

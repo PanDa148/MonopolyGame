@@ -1,19 +1,16 @@
 #pragma once
-#include "Space.h"
 #include "Player.h"
-#include "Card.h"
-#include "Land.h"
-#include "Airport.h"
-#include "Service_Provider.h"
+#include "Property.h"
+#include "GameBoard.h"
 #include <vector>
 #include <string>
 
 class Monopoly{
     private:
     std::vector<Player> players;
-    std::vector<Space*> spaces;
-    std::vector<Card*> community_chest_cards;
-    std::vector<Card*> chance_cards;
+    GameBoard gb;
+    //std::vector<Card*> community_chest_cards;
+    //std::vector<Card*> chance_cards;
 
     void assemble_cards();
     int move_player(Player& player,int num);
