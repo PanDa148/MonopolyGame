@@ -9,23 +9,20 @@ class Monopoly{
     private:
     std::vector<Player> players;
     GameBoard gb;
-    //std::vector<Card*> community_chest_cards;
-    //std::vector<Card*> chance_cards;
 
-    void assemble_cards();
-    int move_player(Player& player,int num);
     void players_turn(Player& player);
     void take_mortgage(Player& player);
     bool is_bankrupt(Player& player);
     std::string player_who_went_bankrupt();
-    void show_properties_owned(Player& player);
+    void show_stats(Player& player);
     int show_options(Player& player);
+    void assign_players();
+    void end_game();
+    void mainGameLoop();
+    bool endTurn(Player& player);
 
     public:
     Monopoly();
     ~Monopoly();
-    void assign_players();
-    void assemble_game_board();
-    void end_game();
-    void manage_player_turns();
+    void play();
 };

@@ -1,14 +1,10 @@
-#include <string>
-#include <vector>
 #include <iostream>
 #include "Monopoly.h"
-#include <algorithm>
+#include "Chance.h"
+#include "Community_Chest.h"
 
 int main()
 {
-    std::cout<<"Welcome to monopoly!\n";
     Monopoly monopoly;
-    monopoly.assign_players();
-    monopoly.manage_player_turns();
-    monopoly.end_game();
+    monopoly.play();
 }

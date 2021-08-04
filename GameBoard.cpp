@@ -1,6 +1,15 @@
 #include "GameBoard.h"
-#include "Property.h"
-#include "Space.h"
+#include "GO.h"
+#include "Go_To_Jail.h"
+#include "Land.h"
+#include "Airport.h"
+#include "Service_Provider.h"
+#include "Community_Chest.h"
+#include "Chance.h"
+#include "Jail.h"
+#include "Interest_on_credit_card_debt.h"
+#include "Income_Tax.h"
+#include "Free_Parking.h"
 
 GameBoard::GameBoard(){
     spaces[0] = new GO();
@@ -69,4 +78,12 @@ GameBoard::~GameBoard() {
     for (int i=0; i<length(); i++) {
         delete spaces[i];
     }
+}
+
+void GameBoard::printSpacesCSV() {
+	std::ofstream gameboard("Spaces1.csv");
+	gameboard<<"name,value,owner,color,base_rent,rent1,rent2,rent3,rent4,rentH\n";
+	for (int i=0; i<spaces.size(); i++) {
+		gameboard<<spaces[i]->CSVstring()<<"\n";
+	}
 }

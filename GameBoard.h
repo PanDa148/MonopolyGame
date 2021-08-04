@@ -1,6 +1,10 @@
 #pragma once
 #include "Dice.h"
-class Space;
+#include "Space.h"
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
+
 class GameBoard {
     private:
     Space* spaces[40];
@@ -14,4 +18,5 @@ class GameBoard {
     void roll();
     int getRoll();
     bool isDoubles();
+	void printSpacesCSV();
 };

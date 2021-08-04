@@ -1,15 +1,15 @@
-#include "Property.h"
+#include "Land.h"
 Land::Land(){}
-Land::Land(std::string new_name, std::string new_color,int new_value,int new_base_rent_val, int new_rent_1h, int new_rent_2h, int new_rent_3h, int new_rent_4h, int new_rent_hotel)
-    : Property(new_name, new_value, new_color),
-    base_rent_val(new_base_rent_val),
-    rent_1h(new_rent_1h),
-    rent_2h(new_rent_2h),
-    rent_3h(new_rent_3h),
-    rent_4h(new_rent_4h),
-    rent_hotel(new_rent_hotel)
-{}
-
+Land::Land(std::string new_name, std::string new_color,int value, int base_rent, int rent1, int rent2, int rent3, int rent4, int rentH)
+    : Property(new_name, value, new_color)
+{
+    rentVals[0]=base_rent;
+    rentVals[1]=rent1;
+    rentVals[2]=rent2;
+    rentVals[3]=rent3;
+    rentVals[4]=rent4;
+    rentVals[5]=rentH;
+}
 
 int Land::get_house_val() {
     if (color=="purple"||color=="light blue") {
@@ -25,8 +25,8 @@ int Land::get_house_val() {
         return 2000;
     }
     else {
-        std::cout<<"Oops! Something went wrong :(\n";
-	return 0;
+        std::cout<<"Oops! Something went wrong in int Land::get_house_val() in Land.cpp at line 12 :(\n";
+	    return 0;
     }
 }
 
@@ -55,41 +55,36 @@ int Land::rent(GameBoard& gb) {
     }
     int c = count(gb);
     if (c != num){
-	return base_rent_val;
+	    return rentVals[0];
     }
     else if (c == num && num_houses==0 && !hotel){
-	return base_rent_val*2;
+	    return rentVals[0]*2;
     }
-    else if (num_houses==1) {
-	return rent_1h;
-    }
-    else if (num_houses==2) {
-	return rent_2h;
-    }
-    else if (num_houses==3) {
-	return rent_3h;
-    }
-    else if (num_houses==4) {
-	return rent_4h;
+    else if (num_houses>=1 && num_houses<=4) {
+	    return rentVals[num_houses];
     }
     else if (hotel) {
-	return rent_hotel;
+	    return rentVals[5];
     }
     else {
-	return 0;
+	    return 0;
     }
 }
 void Land::show_details(){
 	Property::show_details();
     std::cout<<color<<"\n";
-	std::cout<<"Rent $"<<base_rent_val<<"\n";
-	std::cout<<"With 1 House $"<<rent_1h<<"\n";
-	std::cout<<"With 2 Houses $"<<rent_2h<<"\n";
-	std::cout<<"With 3 Houses $"<<rent_3h<<"\n";
-	std::cout<<"With 4 Houses $"<<rent_4h<<"\n";
-	std::cout<<"With HOTEL $"<<rent_hotel<<"\n";
+	std::cout<<"Rent $"<<rentVals[0]<<"\n";
+	std::cout<<"With 1 House $"<<rentVals[1]<<"\n";
+	std::cout<<"With 2 Houses $"<<rentVals[2]<<"\n";
+	std::cout<<"With 3 Houses $"<<rentVals[3]<<"\n";
+	std::cout<<"With 4 Houses $"<<rentVals[4]<<"\n";
+	std::cout<<"With HOTEL $"<<rentVals[5]<<"\n";
 	std::cout<<"Mortgage Value $"<<value/2<<"\n";
 	std::cout<<"Houses cost $"<<Land::get_house_val()<<" each\n";
 	std::cout<<"Hotels cost $"<<Land::get_hotel_val()<<" each\n";
 	std::cout<<"If a player owns ALL the lots of any color group, the rent is doubles on unimproved lots in that group.\n\n";
+}
+
+std::string Land::CSVstring() {
+	return Property::CSVstring() + color + "$" + base_rent + "$" + rent1 + "$" + rent2 + "$" + rent3 + "$" + rent4 + "$" + rentH;
 }
