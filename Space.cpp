@@ -44,6 +44,6 @@ int Space::get_mortgage_value () {
     return 0;
 }
 
-std::string Space::CSVstring() {
+/*std::string Space::CSVstring() {
 	return name;
-}
+}*/

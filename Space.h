@@ -26,5 +26,5 @@ public:
   virtual void show_details();
   virtual int get_mortgage_value ();
   virtual void action(Player& player,  GameBoard& gb,std::vector<Player>& players);
-  virtual std::string CSVstring();
+  //virtual std::string CSVstring();
 };

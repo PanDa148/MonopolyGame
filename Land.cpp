@@ -85,6 +85,6 @@ void Land::show_details(){
 	std::cout<<"If a player owns ALL the lots of any color group, the rent is doubles on unimproved lots in that group.\n\n";
 }
 
-std::string Land::CSVstring() {
-	return Property::CSVstring() + color + "$" + base_rent + "$" + rent1 + "$" + rent2 + "$" + rent3 + "$" + rent4 + "$" + rentH;
-}
+/*std::string Land::CSVstring() {
+	return Property::CSVstring() + color + "$" + rentVals[0] + "$" + rentVals[1] + "$" + rentVals[2] + "$" + rentVals[3] + "$" + rentVals[4] + "$" + rentVals[5];
+}*/

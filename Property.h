@@ -19,5 +19,5 @@ public:
   int count(GameBoard& gb);
   virtual int rent(GameBoard& gb);
   void action(Player& player, GameBoard& gb, std::vector<Player>& players);
-  virtual std::string CSVstring();
+  //virtual std::string CSVstring();
 };

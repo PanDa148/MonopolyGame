@@ -75,6 +75,6 @@ void Property::action(Player& player, GameBoard& gb, std::vector<Player>& player
 		}
 }
 
-std::string Property::CSVstring() {
+/*std::string Property::CSVstring() {
 	return Space::CSVstring() + ",$" + value + "," + owner;
-}
+}*/

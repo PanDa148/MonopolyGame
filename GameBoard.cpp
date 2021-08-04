@@ -80,10 +80,10 @@ GameBoard::~GameBoard() {
     }
 }
 
-void GameBoard::printSpacesCSV() {
+/*void GameBoard::printSpacesCSV() {
 	std::ofstream gameboard("Spaces1.csv");
 	gameboard<<"name,value,owner,color,base_rent,rent1,rent2,rent3,rent4,rentH\n";
-	for (int i=0; i<spaces.size(); i++) {
+	for (int i=0; i<40; i++) {
 		gameboard<<spaces[i]->CSVstring()<<"\n";
 	}
-}
+}*/

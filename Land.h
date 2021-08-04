@@ -13,5 +13,5 @@ public:
   int get_house_val ();
   int get_hotel_val ();
   int rent(GameBoard& gb);
-  std::string CSVstring();
+  //std::string CSVstring();
 };
