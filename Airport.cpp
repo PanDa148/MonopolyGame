@@ -1,27 +1,29 @@
-#include "Property.h"
+#include "Airport.h"
 #include <iostream>
+#include <math.h>
 Airport::Airport(){}
 Airport::Airport(std::string new_name)
     :Property(new_name+" Airport", 2000, "air")
     {}
 
 int Airport::rent(GameBoard& gb) {
-    switch(count(gb)){
+    /*switch(count(gb)){
         case 1:
-            return 250;
+            return 250;//250*2^0
             break;
         case 2:
-            return 500;
+            return 500;//250*2^1
             break;
         case 3:
-            return 1000;
+            return 1000;//250*2^2
             break;
         case 4:
-            return 2000;
+            return 2000;//250*2^3
             break;
-	default:
-	    return 0;
-    }
+        default:
+            return 0;
+    }*/
+    return 250*pow(2,count(gb)-1);
 }
 
 void Airport::show_details(){

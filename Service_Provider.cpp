@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Property.h"
+#include "Service_Provider.h"
 Service_Provider::Service_Provider(){}
 Service_Provider::Service_Provider(std::string new_name)
     :Property(new_name+" Service Provider", 1500, "sp")

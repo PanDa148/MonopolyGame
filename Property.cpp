@@ -51,9 +51,9 @@ void Property::action(Player& player, GameBoard& gb, std::vector<Player>& player
                 std::cout<<get_name()<<" is not owned. Would you like to buy it for $"<<Property::get_value()<<"?(y/n)\n";
                 std::cin>>input;
             }
-                owner=player.get_name();
-                player.cash-=get_value();
-                player.add_property();
+            owner=player.get_name();
+            player.cash-=get_value();
+            player.add_property();
 		}
 		else if (owner == player.get_name()){
 			std::cout<<"You own "<<name<<".\n";
@@ -73,4 +73,8 @@ void Property::action(Player& player, GameBoard& gb, std::vector<Player>& player
             }
             std::cout<<"Rent paid to "<<owner<<"\n";
 		}
+}
+
+std::string Property::CSVstring() {
+	return Space::CSVstring() + ",$" + value + "," + owner;
 }
